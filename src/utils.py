@@ -26,8 +26,8 @@ class Category:
         return self.__products
 
     @property
-    def get_products_list(self):
-        """геттер для вывода информации о продукте"""
+    def product_list_enter(self):
+        """Метод вывода информации о продукте."""
         for product in self.__products:
             return f"{self.name}, {product.price} руб. Остаток: {product.quantity} шт."
 
