@@ -28,8 +28,11 @@ class Category:
     @property
     def product_list_enter(self):
         """Метод вывода информации о продукте."""
+        list_product = []
         for product in self.__products:
-            return f"{self.name}, {product.price} руб. Остаток: {product.quantity} шт."
+            result = f"{self.name}, {product.price} руб. Остаток: {product.quantity} шт."
+            list_product.append(result)
+        return list_product
 
 
 class Product:
