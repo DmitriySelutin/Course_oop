@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class Category:
     """Класс категорий"""
 
@@ -39,12 +42,13 @@ class Category:
         return len(self.__products)
 
     def __str__(self):
-        """ Магический метод для строкового отображения объекта """
+        """Магический метод для строкового отображения объекта"""
         return f"{self.name}, количество продуктов: {len(self.__products)} шт."
 
 
 class Product:
     """Класс продуктов"""
+
     name: str
     description: str
     _price: float
@@ -58,17 +62,34 @@ class Product:
         self.quantity = quantity
 
     @classmethod
-    def create_and_add_to_products(cls, product_list, name, description, price, quantity):
-        """метод для создания товара и добавление его в список товаров с проверкой наличия дубликатов"""
-        for product in product_list:
+    def create_and_add_to_products(
+        cls,
+        products_list: list,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+    ) -> Any:
+        """Метод для создания товара и добавления его в список товаров с проверкой наличия дубликата."""
+        for product in products_list:
             if product.name == name:
                 if product._price < price:
                     product._price = price
                 product.quantity += quantity
                 return product
+
+        # Проверяем, что объект является экземпляром класса Product или его наследником
+        if (
+            not isinstance(name, str)
+            or not isinstance(description, str)
+            or not isinstance(price, float)
+            or not isinstance(quantity, int)
+        ):
+            raise TypeError("Неверный тип данных для создания продукта")
+
         new_product = cls(name, description, price, quantity)
-        product_list.append(new_product)
-        return product_list
+        products_list.append(new_product)
+        return products_list
 
     @property
     def price(self):
@@ -86,7 +107,7 @@ class Product:
             print("Цена успешно изменена")
 
     def __str__(self):
-        """ Магический метод для строкового отображения объекта """
+        """Магический метод для строкового отображения объекта"""
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
@@ -94,3 +115,31 @@ class Product:
         if type(self) is type(other):
             raise TypeError("Можно складывать только одинаковые типы продуктов")
         return self.price * self.quantity + other.price * other.quantity
+
+
+class Smartphone(Product):
+
+    performance: int
+    model: str
+    memory: int
+    color: str
+
+    def init(self, name, description, price, quantity, performance, model, memory, color):
+        super().__init__(name, description, price, quantity)
+        self.performance = performance
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+
+    country: str
+    term: int
+    color: str
+
+    def init(self, name, description, price, quantity, country, term, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.term = term
+        self.color = color
