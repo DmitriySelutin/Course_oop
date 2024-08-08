@@ -22,7 +22,7 @@ class Category:
         cls.__products.append(product)
 
     def get_products(self):
-        """метод для получения продкутов"""
+        """метод для получения продуктов"""
         return self.__products
 
     @property
@@ -34,10 +34,17 @@ class Category:
             list_product.append(result)
         return list_product
 
+    def __len__(self):
+        """Магический метод, который вызывается при применении функции len"""
+        return len(self.__products)
+
+    def __str__(self):
+        """ Магический метод для строкового отображения объекта """
+        return f"{self.name}, количество продуктов: {len(self.__products)} шт."
+
 
 class Product:
     """Класс продуктов"""
-
     name: str
     description: str
     _price: float
@@ -77,3 +84,13 @@ class Product:
             self._price = new_price
             print(self._price)
             print("Цена успешно изменена")
+
+    def __str__(self):
+        """ Магический метод для строкового отображения объекта """
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """Магический метод, который вызывается при сложении двух объектов"""
+        if type(self) is type(other):
+            raise TypeError("Можно складывать только одинаковые типы продуктов")
+        return self.price * self.quantity + other.price * other.quantity
