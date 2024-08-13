@@ -1,4 +1,27 @@
+from abc import ABC, abstractmethod
 from typing import Any
+
+
+class BaseProduct(ABC):
+    """базовый класс"""
+
+    @abstractmethod
+    def new_product(self, *args, **kwargs):
+        """абстрактный метод"""
+        pass
+
+
+class Mixin:
+    """класс Миксин"""
+
+    def __init__(self, *args, **kwargs):
+        """инициализация класса миксин"""
+        super().__init__(*args, **kwargs)
+        print(repr(self))
+
+    def __repr__(self):
+        """вывод для разработчика"""
+        return f"Создан объект класса {self.__class__.__name__}: {self}"
 
 
 class Category:
@@ -46,7 +69,7 @@ class Category:
         return f"{self.name}, количество продуктов: {len(self.__products)} шт."
 
 
-class Product:
+class Product(BaseProduct, Mixin):
     """Класс продуктов"""
 
     name: str
@@ -54,12 +77,13 @@ class Product:
     _price: float
     quantity: int
 
-    def __init__(self, name, description, price, quantity):
+    def __init__(self, name, description, price, quantity, *args, **kwargs):
         """метод для инициализации экземпляра класса"""
         self.name = name
         self.description = description
         self._price = price
         self.quantity = quantity
+        super().__init__(*args, **kwargs)
 
     @classmethod
     def create_and_add_to_products(
@@ -116,30 +140,46 @@ class Product:
             raise TypeError("Можно складывать только одинаковые типы продуктов")
         return self.price * self.quantity + other.price * other.quantity
 
+    def new_product(self, *args, **kwargs):
+        """реализация метода new_product"""
+        pass
 
-class Smartphone(Product):
+
+class Smartphone(Product, Mixin):
+    """Класс смартфон"""
 
     performance: int
     model: str
     memory: int
     color: str
 
-    def init(self, name, description, price, quantity, performance, model, memory, color):
-        super().__init__(name, description, price, quantity)
+    def __init__(self, name, description, price, quantity, performance, model, memory, color):
+        """метод инициализации объекта"""
         self.performance = performance
         self.model = model
         self.memory = memory
         self.color = color
+        super().__init__(name, description, price, quantity)
+
+    def new_product(self, *args, **kwargs):
+        """реализация метода new_product"""
+        pass
 
 
-class LawnGrass(Product):
+class LawnGrass(Product, Mixin):
+    """класс трава газонная"""
 
     country: str
     term: int
     color: str
 
-    def init(self, name, description, price, quantity, country, term, color):
-        super().__init__(name, description, price, quantity)
+    def __init__(self, name, description, price, quantity, country, term, color):
+        """метод инициализации объекта"""
         self.country = country
         self.term = term
         self.color = color
+        super().__init__(name, description, price, quantity)
+
+    def new_product(self, *args, **kwargs):
+        """реализация метода new_product"""
+        pass
