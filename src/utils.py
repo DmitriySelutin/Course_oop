@@ -68,6 +68,15 @@ class Category:
         """Магический метод для строкового отображения объекта"""
         return f"{self.name}, количество продуктов: {len(self.__products)} шт."
 
+    def calculate_average_price(self):
+        """Вычисляет среднюю цену для всех товаров в категории."""
+        try:
+            total_price = sum(product.price for product in self.__products)
+            average_price = total_price / len(self.__products)
+            return average_price
+        except ZeroDivisionError:
+            return 0.0
+
 
 class Product(BaseProduct, Mixin):
     """Класс продуктов"""
@@ -110,6 +119,9 @@ class Product(BaseProduct, Mixin):
             or not isinstance(quantity, int)
         ):
             raise TypeError("Неверный тип данных для создания продукта")
+
+        if quantity == 0:
+            raise ValueError("Tовар с нулевым количеством не может быть добавлен.")
 
         new_product = cls(name, description, price, quantity)
         products_list.append(new_product)

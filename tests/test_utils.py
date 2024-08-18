@@ -105,3 +105,49 @@ def test_price_setter_negative() -> None:
     product = Product("товар", "описание", 100, 10)
     product.price = -10
     assert product.price == 100
+
+
+def test_create_and_add_to_products_invalid_input():
+    products_list = []
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(products_list, 123, "Test Description", 10.0, 5, "color")
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(products_list, "Test Product", 123, 10.0, 5, "color")
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(products_list, "Test Product", "Test Description", "10.0", 5, "color")
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(products_list, "Test Product", "Test Description", 10.0, "5", "color")
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(products_list, "Test Product", "Test Description", 10.0, 5, 123)
+
+
+def test_create_and_add_to_products_valid_input():
+    # Создаем объект, который имеет атрибут 'name'
+    class MyObject:
+        def __init__(self, name):
+            self.name = name
+
+    # Создаем список и добавляем объект в него
+    my_list = []
+    obj = MyObject("my_object")
+    my_list.append(obj)
+
+    # Проверяем, что объект был добавлен в список
+    assert len(my_list) == 1
+    assert my_list[0].name == "my_object"
+
+
+def test_create_and_add_to_products_missing_argument():
+    products_list = []
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(
+            products_list, "Test Product", "Test Description", 10.0, 5, "color", "some_object"
+        )
+
+
+def test_create_and_add_to_products_extra_argument():
+    products_list = []
+    with pytest.raises(TypeError):
+        Product.create_and_add_to_products(
+            products_list, "Test Product", "Test Description", 10.0, 5, "Red", "some_object", "extra_argument"
+        )
